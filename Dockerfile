@@ -36,22 +36,17 @@ RUN apt-get -y install vim
 # Create Projects directory (to be mounted)
 RUN mkdir ~/Projects
 
-# Aliases!
-RUN echo "alias vi=vim" >> ~/.bashrc
-RUN echo "alias cdd='cd ~/Projects'" >> ~/.bashrc
-
-# Prompt!
-RUN echo "export PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '" >> ~/.bashrc
-
-# Colours!
-RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33'" >> ~/.bashrc
-RUN echo "export TERM=xterm-color" >> ~/.bashrc
-
 # Install vundle
 RUN mkdir -p ~/.vim/bundle && git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+# Inject vimrc 
+COPY ./vimrc.inject /tmp/vimrc.inject
+RUN cat /tmp/vimrc.inject >> ~/.vimrc
 
 # Run InstallPlugin so vim is set up
 RUN vim -c 'PluginInstall' -c 'qa!'
 
-# Add vimrc 
-COPY ./vimrc /root/.vimrc
+# Inject bashrc
+COPY ./bashrc.inject /tmp/bashrc.inject
+RUN cat /tmp/bashrc.inject >> ~/.bashrc
+

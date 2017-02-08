@@ -1,19 +1,22 @@
 FROM debian:jessie
 
-#Debian release name
+# Debian release name
 ENV DEBIAN_RELEASE=jessie
 
-#Docker Version
+# Docker Version
 ENV DOCKER_VERSION=1.13
 
-#Python Version
+# Python Version
 ENV PYTHON_VERSION=3.4
 
 # Update apt repositories
 RUN apt-get update
 
-# Install python, lsb_release (which depends on python), curl
-RUN apt-get -y install python$PYTHON_VERSION lsb-release curl
+# Install build tools
+RUN apt-get -y install build-essential
+
+# Install python, python-dev, lsb_release (which depends on python), curl
+RUN apt-get -y install python$PYTHON_VERSION python$PYTHON_VERSION-dev lsb-release curl
 
 # Install Docker dependencies
 RUN apt-get -y install apt-transport-https ca-certificates python-software-properties software-properties-common
@@ -30,8 +33,29 @@ RUN apt-get update
 # Install docker
 RUN apt-get -y install docker-engine
 
-# Install extra packages
+# Install python setup tools (for pip)
+RUN apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
+
+# Install pip
+RUN easy_install$(echo $PYTHON_VERSION | cut -c -1) pip
+
+# Install vim
 RUN apt-get -y install vim
+
+# Install debscan for security updates
+RUN apt-get -y install debsecan
+
+# Copy apt package list
+COPY ./extra_packages /tmp/extra_packages
+
+# Install extra packages
+RUN cat /tmp/extra_packages | xargs apt-get -y install
+
+# Copy pip package list
+COPY ./pip_packages /tmp/pip_packages
+
+# Install pip packages
+RUN pip install -r /tmp/pip_packages
 
 # Create Projects directory (to be mounted)
 RUN mkdir ~/Projects
@@ -50,3 +74,5 @@ RUN cat /tmp/vimrc.inject >> ~/.vimrc
 COPY ./bashrc.inject /tmp/bashrc.inject
 RUN cat /tmp/bashrc.inject >> ~/.bashrc
 
+# Apply security updates
+RUN apt-get install $(debsecan --suite ${DEBIAN_RELEASE} --format packages --only-fixed)

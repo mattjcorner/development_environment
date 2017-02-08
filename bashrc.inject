@@ -1,6 +1,15 @@
 alias vi=vim
 alias cdd='cd ~/Projects'
 alias ls='ls --color'
+alias python=python3
 
 export PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
 export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33'
+
+# Copy RSA key if provided and set permissions
+if [ -s /tmp/id_rsa ]; then
+	mkdir --parents $HOME/.ssh
+	cp /tmp/id_rsa $HOME/.ssh
+	chmod 0700 $HOME/.ssh
+	chmod 0400 $HOME/.ssh/id_rsa
+fi

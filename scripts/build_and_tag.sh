@@ -2,4 +2,4 @@
 
 BUILD_HASH="$(docker build -q .)"
 
-docker tag $BUILD_HASH mattjc/linux_dev_environment:latest
+docker tag $BUILD_HASH mattjc/development_environment:latest

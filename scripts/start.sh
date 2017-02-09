@@ -9,5 +9,5 @@ docker run -ti -e "DOCKER_HOST=tcp://0.0.0.0:2375" \
 -v "/${HOME}/.aws:/root/.aws":ro \
 -v "/${HOME}/Downloads:/root/Downloads
 --hostname "$HOSTNAME" \
-mattjc/linux_dev_environment:latest //bin/bash
+mattjc/development_environment:latest //bin/bash
 

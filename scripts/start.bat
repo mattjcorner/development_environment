@@ -12,5 +12,6 @@ docker run -ti -e TERM=%TERM% -v /var/run/docker.sock:/var/run/docker.sock^
  -v %USERHOME:\=/%/Projects:/root/Projects^
  -v %USERHOME:\=/%/.ssh/id_rsa:/tmp/id_rsa:ro^
  -v %USERHOME:\=/%/.gitconfig:/root/.gitconfig^
+ -v %USERHOME:\=/%/.aws:/root/.aws:ro^
  --hostname %HOSTNAME%^
  mattjc/linux_dev_environment:latest /bin/bash

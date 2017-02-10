@@ -55,7 +55,7 @@ RUN cat /tmp/extra_packages | xargs apt-get -y install
 COPY ./pip_packages /tmp/pip_packages
 
 # Install pip packages
-RUN pip install -r /tmp/pip_packages
+RUN pip install --upgrade -r /tmp/pip_packages
 
 # Create Projects directory (to be mounted)
 RUN mkdir ~/Projects

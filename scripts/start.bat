@@ -14,5 +14,7 @@ docker run -ti -e TERM=%TERM% -v /var/run/docker.sock:/var/run/docker.sock^
  -v %USERHOME:\=/%/.gitconfig:/root/.gitconfig^
  -v %USERHOME:\=/%/.aws:/root/.aws:ro^
  -v %USERHOME:\=/%/.pypirc:/root/.pypirc:ro^
+ -p 80:80^
+ -p 8080:8080^
  --hostname %HOSTNAME%^
  mattjc/development_environment:latest /bin/bash

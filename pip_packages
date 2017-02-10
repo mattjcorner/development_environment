@@ -1,3 +1,5 @@
 pycrypto
 boto3
 awscli
+setuptools
+docker-compose

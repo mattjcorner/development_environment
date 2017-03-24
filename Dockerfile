@@ -49,7 +49,7 @@ RUN apt-get -y install debsecan
 COPY ./extra_packages /tmp/extra_packages
 
 # Install extra packages
-RUN cat /tmp/extra_packages | xargs apt-get -y install
+RUN apt-get update && cat /tmp/extra_packages | xargs apt-get -y install
 
 # Copy pip package list
 COPY ./pip_packages /tmp/pip_packages
@@ -76,3 +76,4 @@ RUN cat /tmp/bashrc.inject >> ~/.bashrc
 
 # Apply security updates
 RUN apt-get install $(debsecan --suite ${DEBIAN_RELEASE} --format packages --only-fixed)
+

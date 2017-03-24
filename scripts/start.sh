@@ -8,7 +8,7 @@ docker run -ti -e "DOCKER_HOST=tcp://0.0.0.0:2375" \
 -v "/${HOME}/.gitconfig:/root/.gitconfig" \
 -v "/${HOME}/.aws:/root/.aws":ro \
 -v "/${HOME}/.pypirc:/root/.pypirc":ro \
--v "/${HOME}/Downloads:/root/Downloads
+-v "/${HOME}/Downloads:/root/Downloads"
 --hostname "$HOSTNAME" \
 mattjc/development_environment:latest //bin/bash
 

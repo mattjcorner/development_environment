@@ -1,7 +1,8 @@
 @ECHO OFF
 
 SET HOSTNAME=mattdev
-SET USERHOME=%HOMEPATH%
+SET DRIVELETTER=c
+SET USERHOME=/%DRIVELETTER%%HOMEPATH%
 
 REM Set TERM to cygwin to enable scrolling in apps like vim
 SET TERM=cygwin

@@ -9,6 +9,8 @@ docker run -ti -e "DOCKER_HOST=tcp://0.0.0.0:2375" \
 -v "/${HOME}/.aws:/root/.aws":ro \
 -v "/${HOME}/.pypirc:/root/.pypirc":ro \
 -v "/${HOME}/Downloads:/root/Downloads"
+-p 80:80 \
+-p 8080:8080 \
 --hostname "$HOSTNAME" \
 mattjc/development_environment:latest //bin/bash
 

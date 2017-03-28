@@ -57,6 +57,12 @@ COPY ./pip_packages /tmp/pip_packages
 # Install pip packages
 RUN pip install --upgrade -r /tmp/pip_packages
 
+# Copy usrlocal.inject files
+COPY ./usrlocal.inject /tmp/usrlocal
+
+# Copy usrlocal.inject files to /usr/local
+RUN cp -r /tmp/usrlocal/* /usr/local 
+
 # Create Projects directory (to be mounted)
 RUN mkdir ~/Projects
 

@@ -8,9 +8,8 @@ export PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
 export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33'
 
 # Copy RSA key if provided and set permissions
-if [ -s /tmp/id_rsa ]; then
-	mkdir --parents $HOME/.ssh
-	cp /tmp/id_rsa $HOME/.ssh
-	chmod 0700 $HOME/.ssh
-	chmod 0400 $HOME/.ssh/id_rsa
+if [ -s /tmp/.ssh ]; then
+	cp -r /tmp/.ssh $HOME/.ssh
+	chmod -R 0700 $HOME/.ssh
+	chmod -R 0400 $HOME/.ssh/*
 fi

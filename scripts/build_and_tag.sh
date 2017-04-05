@@ -2,4 +2,6 @@
 
 BUILD_HASH="$(docker build -q .)"
 
-docker tag $BUILD_HASH mattjc/development_environment:latest
+if [[ ! -z "$BUILD_HASH" ]]; then
+	docker tag $BUILD_HASH mattjc/development_environment:latest
+fi

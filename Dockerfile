@@ -39,6 +39,9 @@ RUN apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
 # Install pip
 RUN easy_install$(echo $PYTHON_VERSION | cut -c -1) pip
 
+# Add node repositories to apt-get and install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs
+
 # Install vim
 RUN apt-get -y install vim
 
@@ -56,6 +59,12 @@ COPY ./pip_packages /tmp/pip_packages
 
 # Install pip packages
 RUN pip install --upgrade -r /tmp/pip_packages
+
+# Copy npm packages list
+COPY ./npm_packages /tmp/npm_packages
+
+# Update npm and install packages
+RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
 
 # Copy usrlocal.inject files
 COPY ./usrlocal.inject /tmp/usrlocal

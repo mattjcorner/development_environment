@@ -27,20 +27,24 @@ RUN add-apt-repository "deb https://apt.dockerproject.org/repo/ debian-$DEBIAN_R
 # Add Docker GPG key
 RUN curl -fsSL https://yum.dockerproject.org/gpg | apt-key add -
 
-# Update apt repositories... again
-RUN apt-get update
+# Update & Install docker
+RUN apt-get update && apt-get -y install docker-engine
 
-# Install docker
-RUN apt-get -y install docker-engine
-
-# Install python setup tools (for pip)
-RUN apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
+# Update & Install python setup tools (for pip)
+RUN apt-get update && apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
 
 # Install pip
 RUN easy_install$(echo $PYTHON_VERSION | cut -c -1) pip
 
 # Add node repositories to apt-get and install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs
+
+# Add GCP SDK repositories
+RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-$DEBIAN_RELEASE main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && cat /etc/apt/sources.list.d/google-cloud-sdk.list
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+
+# Install GCP tools
+RUN apt-get update && apt-get install -y google-cloud-sdk google-cloud-sdk-app-engine-python kubectl 
 
 # Install vim
 RUN apt-get -y install vim

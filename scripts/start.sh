@@ -12,5 +12,6 @@ docker run -ti \
 -p 80:80 \
 -p 8080:8080 \
 --hostname "$HOSTNAME" \
-mattjc/development_environment:latest //bin/bash
+--net=host \
+mattjc/development_environment:stretch //bin/bash
 

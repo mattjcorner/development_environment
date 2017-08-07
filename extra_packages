@@ -6,4 +6,4 @@ subversion
 maven
 default-jdk
 mysql-client
-libmysqlclient-dev
+default-libmysqlclient-dev

@@ -3,3 +3,4 @@ boto3
 awscli
 setuptools
 docker-compose
+virtualenv

@@ -1,13 +1,10 @@
-FROM debian:jessie
+FROM debian:stretch
 
 # Debian release name
-ENV DEBIAN_RELEASE=jessie
-
-# Docker Version
-ENV DOCKER_VERSION=1.13
+ENV DEBIAN_RELEASE=stretch
 
 # Python Version
-ENV PYTHON_VERSION=3.4
+ENV PYTHON_VERSION=3.5
 
 # Update apt repositories
 RUN apt-get update
@@ -16,10 +13,10 @@ RUN apt-get update
 RUN apt-get -y install build-essential
 
 # Install python, python-dev, lsb_release (which depends on python), curl
-RUN apt-get -y install python$PYTHON_VERSION python$PYTHON_VERSION-dev lsb-release curl
+RUN apt-get -y install python python${PYTHON_VERSION}-dev lsb-release curl
 
 # Install Docker dependencies
-RUN apt-get -y install apt-transport-https ca-certificates python-software-properties software-properties-common
+RUN apt-get -y install apt-transport-https ca-certificates python3-software-properties software-properties-common
 
 # Add Docker apt repository
 RUN add-apt-repository "deb https://apt.dockerproject.org/repo/ debian-$DEBIAN_RELEASE main"
@@ -33,8 +30,6 @@ RUN apt-get update && apt-get -y install docker-engine
 # Update & Install python setup tools (for pip)
 RUN apt-get update && apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
 
-# Install pip
-RUN easy_install$(echo $PYTHON_VERSION | cut -c -1) pip
 
 # Add node repositories to apt-get and install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs
@@ -57,6 +52,15 @@ COPY ./extra_packages /tmp/extra_packages
 
 # Install extra packages
 RUN apt-get update && cat /tmp/extra_packages | xargs apt-get -y install
+
+# Set alternatives to desired python version
+RUN alias python=python
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 2
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 3
+
+# Install the proper version of pip 
+RUN python -m easy_install pip
 
 # Copy pip package list
 COPY ./pip_packages /tmp/pip_packages

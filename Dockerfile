@@ -1,10 +1,13 @@
-FROM debian:stretch
+FROM debian:buster
 
 # Debian release name
-ENV DEBIAN_RELEASE=stretch
+ENV DEBIAN_RELEASE=buster
 
 # Python Version
-ENV PYTHON_VERSION=3.5
+ENV PYTHON_VERSION=3.6
+
+# Node Setup Version
+ENV NODE_SETUP_VERSION=8.x
 
 # Update apt repositories
 RUN apt-get update
@@ -19,7 +22,8 @@ RUN apt-get -y install python python${PYTHON_VERSION}-dev lsb-release curl
 RUN apt-get -y install apt-transport-https ca-certificates python3-software-properties software-properties-common
 
 # Add Docker apt repository
-RUN add-apt-repository "deb https://apt.dockerproject.org/repo/ debian-$DEBIAN_RELEASE main"
+# TODO: Update when buster has an official docker release 
+RUN add-apt-repository "deb https://apt.dockerproject.org/repo/ debian-stretch main"
 
 # Add Docker GPG key
 RUN curl -fsSL https://yum.dockerproject.org/gpg | apt-key add -
@@ -32,7 +36,7 @@ RUN apt-get update && apt-get -y install python$(echo $PYTHON_VERSION | cut -c -
 
 
 # Add node repositories to apt-get and install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_$NODE_SETUP_VERSION | bash - && apt-get install -y nodejs
 
 # Add GCP SDK repositories
 RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-$DEBIAN_RELEASE main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && cat /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -73,6 +77,18 @@ COPY ./npm_packages /tmp/npm_packages
 
 # Update npm and install packages
 RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
+
+# Add Azure repo
+# Have to use jessie for now...
+RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ jessie main" | tee /etc/apt/sources.list.d/azure-cli.list
+
+# Get MS Signing Key
+RUN apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
+     --keyserver packages.microsoft.com \
+     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+
+# Install Azure CLI
+RUN apt-get update && apt-get install azure-cli
 
 # Copy usrlocal.inject files
 COPY ./usrlocal.inject /tmp/usrlocal

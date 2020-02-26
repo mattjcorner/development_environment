@@ -1,10 +1,10 @@
-FROM debian:stretch
+FROM debian:buster
 
 # Debian release name
 ENV DEBIAN_RELEASE=stretch
 
 # Python Version
-ENV PYTHON_VERSION=3.5
+ENV PYTHON_VERSION=3.7
 
 # Update apt repositories
 RUN apt-get update
@@ -68,11 +68,12 @@ COPY ./pip_packages /tmp/pip_packages
 # Install pip packages
 RUN pip install --upgrade -r /tmp/pip_packages
 
+# Not sure why NPM isn't working
 # Copy npm packages list
-COPY ./npm_packages /tmp/npm_packages
+# COPY ./npm_packages /tmp/npm_packages
 
 # Update npm and install packages
-RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
+# RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
 
 # Copy usrlocal.inject files
 COPY ./usrlocal.inject /tmp/usrlocal

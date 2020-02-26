@@ -5,5 +5,5 @@ unzip
 subversion
 maven
 default-jdk
-mysql-client
+default-mysql-client
 default-libmysqlclient-dev

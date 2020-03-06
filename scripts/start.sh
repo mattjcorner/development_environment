@@ -11,7 +11,7 @@ docker run -ti \
 -v "/${HOME}/Downloads:/root/Downloads" \
 -p 80:80 \
 -p 8080:8080 \
+-p 3000:3000 \
 --hostname "$HOSTNAME" \
---net=host \
 mattjc/development_environment:latest //bin/bash
 

@@ -1,3 +1,4 @@
 yarn
+@aws-amplify/cli
 yo
 serverless

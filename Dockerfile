@@ -1,7 +1,7 @@
 FROM debian:buster
 
 # Debian release name
-ENV DEBIAN_RELEASE=stretch
+ENV DEBIAN_RELEASE=buster
 
 # Python Version
 ENV PYTHON_VERSION=3.7
@@ -19,20 +19,20 @@ RUN apt-get -y install python python${PYTHON_VERSION}-dev lsb-release curl
 RUN apt-get -y install apt-transport-https ca-certificates python3-software-properties software-properties-common
 
 # Add Docker apt repository
-RUN add-apt-repository "deb https://apt.dockerproject.org/repo/ debian-$DEBIAN_RELEASE main"
+RUN add-apt-repository "deb https://download.docker.com/linux/debian/ buster stable"
 
 # Add Docker GPG key
-RUN curl -fsSL https://yum.dockerproject.org/gpg | apt-key add -
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 
 # Update & Install docker
-RUN apt-get update && apt-get -y install docker-engine
+RUN apt-get update && apt-get -y install docker-ce
 
 # Update & Install python setup tools (for pip)
 RUN apt-get update && apt-get -y install python$(echo $PYTHON_VERSION | cut -c -1)-setuptools
 
 
 # Add node repositories to apt-get and install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && apt-get install -yf nodejs
 
 # Add GCP SDK repositories
 RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-$DEBIAN_RELEASE main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && cat /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -68,12 +68,11 @@ COPY ./pip_packages /tmp/pip_packages
 # Install pip packages
 RUN pip install --upgrade -r /tmp/pip_packages
 
-# Not sure why NPM isn't working
 # Copy npm packages list
-# COPY ./npm_packages /tmp/npm_packages
+COPY ./npm_packages /tmp/npm_packages
 
 # Update npm and install packages
-# RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
+ RUN npm update -g npm@latest && cat /tmp/npm_packages | xargs npm install -g
 
 # Copy usrlocal.inject files
 COPY ./usrlocal.inject /tmp/usrlocal
